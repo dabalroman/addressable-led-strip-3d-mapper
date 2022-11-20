@@ -1,10 +1,10 @@
 {
-    "name": "p5-typescript-react-starter",
+    "name": "addressable-led-strip-3d-mapper",
     "version": "0.1.0",
     "private": false,
     "author": {
         "name": "Roman Dąbal",
-        "url": "https://github.com/dabalroman/p5-typescript-react-starter"
+        "url": "https://github.com/dabalroman/addressable-led-strip-3d-mapper"
     },
     "dependencies": {
         "p5": "^1",
@@ -15,7 +15,9 @@
     },
     "scripts": {
         "start": "react-scripts start",
-        "build": "react-scripts build"
+        "build": "react-scripts build",
+        "lint": "eslint --ext js,jsx,ts,tsx",
+        "lintfix": "eslint --ext js,jsx,ts,tsx --fix"
     },
     "eslintConfig": {
         "extends": [

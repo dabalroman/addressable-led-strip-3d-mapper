@@ -26,7 +26,7 @@ function App () {
 
     return (
         <div className="app">
-            <h1>p5-typescript-react-starter demo</h1>
+            <h1>addressable-led-strip-3d-mapper</h1>
             <div ref={canvasParentRef}/>
             <input onChange={(event: ChangeEvent<HTMLInputElement>) => setText(event.target.value)} value={text}/>
             <input

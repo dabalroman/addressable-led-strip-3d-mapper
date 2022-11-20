@@ -12,6 +12,10 @@
         "airbnb-typescript"
     ],
     "rules": {
+        "linebreak-style": [
+            "error",
+            "unix"
+        ],
         "no-unused-vars": "off",
         "no-plusplus": "off",
         "no-continue": "off",
