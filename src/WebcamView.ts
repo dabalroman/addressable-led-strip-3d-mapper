@@ -2,9 +2,13 @@ import p5 from 'p5';
 import CanvasRenderer from './CanvasRenderer';
 import ImageWrapper from './ImageWrapper';
 import Pixel from './Pixel';
+import HighPassFilter from './Filters/HighPassFilter';
 
 export default class WebcamView extends CanvasRenderer {
     capture: p5.Element | null = null;
+    image!: ImageWrapper;
+
+    highPassFilter: HighPassFilter = new HighPassFilter(200);
 
     setup () {
         super.setup();
@@ -12,28 +16,22 @@ export default class WebcamView extends CanvasRenderer {
         this.capture = this.p.createCapture(this.p.VIDEO);
         this.capture.size(this.p.width, this.p.height);
         this.capture.hide();
+
+        this.image = new ImageWrapper(this.capture);
     }
 
     draw () {
-        if (this.capture === null) {
+        if (this.capture === null || !this.image.update()) {
             return;
         }
 
-        const image: ImageWrapper = new ImageWrapper(this.capture);
-
-        if (image.raw.width <= 0) {
-            return;
+        for (let pixel: Pixel | null = this.image.nextPixel(); pixel !== null; pixel = this.image.nextPixel()) {
+            this.highPassFilter.apply(pixel);
+            this.image.commitPixel(pixel);
         }
 
-        image.raw.loadPixels();
+        this.image.commit();
 
-        for (let pixel: Pixel | null = image.nextPixel(); pixel !== null; pixel = image.nextPixel()) {
-            pixel.r *= 2;
-            image.commitPixel(pixel);
-        }
-
-        image.raw.updatePixels();
-
-        this.p.image(image.raw, 0, 0, 1280, 720);
+        this.p.image(this.image.raw, 0, 0, 1280, 720);
     }
 }
