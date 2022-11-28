@@ -1,5 +1,6 @@
 import p5 from 'p5';
 import Pixel from './Pixel';
+import VPixel from './VPixel';
 
 export default class ImageWrapper {
     raw!: p5.Image;
@@ -44,10 +45,27 @@ export default class ImageWrapper {
         };
     }
 
+    getVPixel (x: number, y: number): VPixel {
+        const address: number = this.addressLookup[x][y];
+
+        return {
+            x,
+            y,
+            address,
+            v: this.raw.pixels[address]
+        };
+    }
+
     commitPixel (pixel: Pixel): void {
         this.raw.pixels[pixel.address] = pixel.r;
         this.raw.pixels[pixel.address + 1] = pixel.g;
         this.raw.pixels[pixel.address + 2] = pixel.b;
+    }
+
+    commitVPixel (pixel: VPixel): void {
+        this.raw.pixels[pixel.address] = pixel.v;
+        this.raw.pixels[pixel.address + 1] = pixel.v;
+        this.raw.pixels[pixel.address + 2] = pixel.v;
     }
 
     commit (): void {
@@ -63,7 +81,7 @@ export default class ImageWrapper {
         this.currentPosition.y = 0;
     }
 
-    nextPixel (): Pixel | null {
+    nextPosition (): boolean {
         this.currentPosition.x++;
 
         if (this.currentPosition.x >= this.raw.width) {
@@ -71,11 +89,15 @@ export default class ImageWrapper {
             this.currentPosition.y++;
         }
 
-        if (this.currentPosition.y >= this.raw.height) {
-            return null;
-        }
+        return this.currentPosition.y < this.raw.height;
+    }
 
-        return this.getPixel(this.currentPosition.x, this.currentPosition.y);
+    nextPixel (): Pixel | null {
+        return this.nextPosition() ? this.getPixel(this.currentPosition.x, this.currentPosition.y) : null;
+    }
+
+    nextVPixel (): VPixel | null {
+        return this.nextPosition() ? this.getVPixel(this.currentPosition.x, this.currentPosition.y) : null;
     }
 
     generateAddressLookupTable (): void {

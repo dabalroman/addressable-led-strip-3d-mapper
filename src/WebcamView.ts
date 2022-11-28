@@ -1,8 +1,8 @@
 import p5 from 'p5';
 import CanvasRenderer from './CanvasRenderer';
 import ImageWrapper from './ImageWrapper';
-import Pixel from './Pixel';
 import HighPassFilter from './Filters/HighPassFilter';
+import VPixel from './VPixel';
 
 export default class WebcamView extends CanvasRenderer {
     capture: p5.Element | null = null;
@@ -25,9 +25,11 @@ export default class WebcamView extends CanvasRenderer {
             return;
         }
 
-        for (let pixel: Pixel | null = this.image.nextPixel(); pixel !== null; pixel = this.image.nextPixel()) {
-            this.highPassFilter.apply(pixel);
-            this.image.commitPixel(pixel);
+        this.image.resetPosition();
+
+        for (let vPixel: VPixel | null = this.image.nextVPixel(); vPixel !== null; vPixel = this.image.nextVPixel()) {
+            this.highPassFilter.apply(vPixel);
+            this.image.commitVPixel(vPixel);
         }
 
         this.image.commit();
