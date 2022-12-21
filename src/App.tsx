@@ -13,10 +13,15 @@ function App () {
             renderer.current?.teardown();
         };
     }, []);
+
     return (
         <div className="app">
             <h1>addressable-led-strip-3d-mapper</h1>
             <div ref={canvasParentRef}/>
+            <div className="controls">
+                <button type="button" onClick={() => renderer.current?.reset()}>RESET</button>
+                <button type="button" onClick={() => renderer.current?.grabData()}>GRAB DATA</button>
+            </div>
         </div>
     );
 }

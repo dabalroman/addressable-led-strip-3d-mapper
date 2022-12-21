@@ -1,5 +1,6 @@
 import LineMatch from './LineMatch';
 import gUniqueIdGenerator from '../UniqueIdGenerator';
+import Position2D from '../Position2D';
 
 export default class Blob {
     id: number = 0;
@@ -39,7 +40,7 @@ export default class Blob {
     }
 
     addLineMatch (lineMatch: LineMatch) {
-        for (let x: number = lineMatch.xMin; x < lineMatch.xMax; x++) {
+        for (let x: number = lineMatch.xMin; x <= lineMatch.xMax; x++) {
             this.addPixel(x, lineMatch.y);
         }
     }
@@ -52,6 +53,17 @@ export default class Blob {
         this.xWeight += blob.xWeight;
         this.yWeight += blob.yWeight;
         this.amountOfPixels += blob.amountOfPixels;
+    }
+
+    getCenter (): Position2D {
+        return {
+            x: Math.round(this.xWeight / this.amountOfPixels),
+            y: Math.round(this.yWeight / this.amountOfPixels)
+        };
+    }
+
+    getSize (): number {
+        return this.amountOfPixels;
     }
 
     static fromLineMatch (lineMatch: LineMatch) {
