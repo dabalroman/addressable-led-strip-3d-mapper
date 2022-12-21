@@ -12,7 +12,7 @@ export default class WebcamView extends CanvasRenderer {
     capture: p5.Element | null = null;
     image!: ImageWrapper;
 
-    highPassFilter: HighPassFilter = new HighPassFilter(180);
+    highPassFilter: HighPassFilter = new HighPassFilter(230);
     blobFinder: BlobFinder = new BlobFinder();
     ledMapper: BlobTracer = new BlobTracer();
 
@@ -104,13 +104,19 @@ export default class WebcamView extends CanvasRenderer {
         this.p.pop();
     }
 
-    reset () {
+    resetAction () {
         this.ledMapper.reset();
     }
 
-    grabData () {
-        // eslint-disable-next-line no-console
-        console.table(this.ledMapper.ledPositions);
+    grabDataAction (): string {
+        return this.ledMapper.ledPositions.reduce(
+            (carry: string, position: Position2D) => `${carry}[${position.x}, ${position.y}],\n`,
+            ''
+        ) as string;
+    }
+
+    setFilterThresholdAction (value: number) {
+        this.highPassFilter.cutoffValue = value;
     }
 
     mouseClicked () {
