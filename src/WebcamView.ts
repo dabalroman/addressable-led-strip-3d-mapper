@@ -110,7 +110,7 @@ export default class WebcamView extends CanvasRenderer {
 
     grabDataAction (): string {
         return this.ledMapper.ledPositions.reduce(
-            (carry: string, position: Position2D) => `${carry}[${position.x}, ${position.y}],\n`,
+            (carry: string, position: Position2D) => `${carry}{${position.x}, ${position.y}},\n`,
             ''
         ) as string;
     }

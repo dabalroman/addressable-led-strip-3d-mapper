@@ -11,6 +11,7 @@ export default class BlobTracer {
 
     reset () {
         this.ledPositions.length = 0;
+        this.currentBlobPositionHistory.length = 0;
     }
 
     processBlobsFromFrame (blobs: Blob[]) {
